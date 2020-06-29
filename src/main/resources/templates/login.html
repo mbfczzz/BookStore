@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link rel="stylesheet" th:href="@{/tool/bootstrap/css/bootstrap.css}">
+    <link th:href="@{/tool/bootstrap/css/bootstrapValidator.css}" rel="stylesheet">
+    <script th:src="@{/tool/jquery-3.5.1.js}"></script>
+    <script th:src="@{/tool/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/tool/bootstrap/js/bootstrapValidator.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body>
+    
+    <div class="container">
+        <div class="login">
+            <div class="head">
+                欢迎登录
+            </div>
+            <form  action="/user/login" method="post" id="loginfrom" >
+                <div class="input">
+                    <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">@</span>
+                    <input type="text" class="form-control"  name="username" placeholder="邮箱/用户名">
+                </div>
+                    </div>
+                </div>
+
+                <div class="input">
+                    <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    <input type="password" class="form-control"  name="password" placeholder="密码">
+                </div>
+                    </div>
+                </div>
+
+                <div class="error_msg error">
+                    <span id="mes" th:text="${mes}"></span>
+                </div>
+
+                <div class="submit">
+                    <button type="submit" id="submitbutton" class="btn btn-primary">登录</button>
+                </div>
+                
+                <div>
+                    <a href="/register" id="a_Sign_up">注册账号</a>
+                    <a href="/fgpassword" id="a_forgot_password">忘记密码？</a>
+                </div>
+                
+        </form>
+     </div>       
+    </div>
+    <script th:src="@{/js/login.js}">
+    </script>
+</body>
+</html>
