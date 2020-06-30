@@ -2,7 +2,6 @@ package com.example.demo.Controller;
 
 import com.example.demo.Entity.User;
 import com.example.demo.Service.UserService;
-import com.example.demo.utils.Md5Util;
 import com.example.demo.utils.RandomValidateCodeUtil;
 import com.example.demo.utils.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -86,7 +85,6 @@ public class UserController {
     public ModelAndView changepassword(@RequestParam("email") String email,@RequestParam("password") String password){
             email = HtmlUtils.htmlEscape(email);
             password = HtmlUtils.htmlEscape(password);
-            password = Md5Util.string2MD5(password);
             User user = userService.getByemail(email);
             ModelAndView m= new ModelAndView();
             if(user==null){
@@ -94,7 +92,11 @@ public class UserController {
                 m.addObject("mes","用户不存在");
                 return m;
             }
-            user.setPassword(password);
+            String salt =  new SecureRandomNumberGenerator().nextBytes().toString();
+            int times=2;
+            String encodePassword= new SimpleHash("md5",password,salt,times).toString();
+            user.setSalt(salt);
+            user.setPassword(encodePassword);
             userService.update(user);
             m.setViewName("redirect:/login");
             return m;
@@ -106,9 +108,10 @@ public class UserController {
         email = HtmlUtils.htmlEscape(email);
         password = HtmlUtils.htmlEscape(password);
         phone =HtmlUtils.htmlEscape(phone);
-        boolean exist = userService.isExist(username);
+        boolean nameexist = userService.nameisExist(username);
+        boolean emailexist = userService.emailisExist(email);
         ModelAndView m = new ModelAndView();
-        if(exist){
+        if(nameexist || emailexist){
                 m.setViewName("Sign_up");
                 m.addObject("mes","此用户已存在");
                 return  m;
@@ -125,7 +128,10 @@ public class UserController {
         user1.setPhone(phone);
         user1.setEnable(true);
         userService.addUser(user1);
-        m.setViewName("redirect:/index");
+        m.addObject("username",user1.getUsername());
+        m.addObject("password",password);
+        m.addObject("issubmit",true);
+        m.setViewName("login");
         return m;
     }
 

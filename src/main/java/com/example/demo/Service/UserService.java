@@ -43,8 +43,11 @@ public class UserService {
     public  void Save(User user){
         userDao.save(user);
     }
-    public  boolean isExist(String  username){
+    public boolean nameisExist(String  username){
         return userDao.existsByUsername(username);
+    }
+    public boolean emailisExist(String email){
+        return userDao.existsByEmail(email);
     }
     public  void update(User user){
         userDao.save(user);

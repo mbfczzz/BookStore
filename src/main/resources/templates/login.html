@@ -23,7 +23,7 @@
                     <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon">@</span>
-                    <input type="text" class="form-control"  name="username" placeholder="邮箱/用户名">
+                    <input type="text" class="form-control"  th:value="${username}" name="username" placeholder="邮箱/用户名">
                 </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                     <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
-                    <input type="password" class="form-control"  name="password" placeholder="密码">
+                    <input type="password" class="form-control"  th:value="${password}" name="password" placeholder="密码">
                 </div>
                     </div>
                 </div>
@@ -53,7 +53,17 @@
         </form>
      </div>       
     </div>
-    <script th:src="@{/js/login.js}">
+    <script  th:src="@{/js/login.js}">
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(function () {//页面加载完成
+            var issubmit = /*[[${issubmit}]]*/ false;
+            if(issubmit){
+                $("#submitbutton").click();
+            }
+        });
+        /*]]>*/
     </script>
 </body>
 </html>
