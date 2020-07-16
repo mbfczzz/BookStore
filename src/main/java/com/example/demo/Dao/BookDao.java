@@ -10,4 +10,5 @@ import java.util.List;
 public interface BookDao extends JpaRepository<Book,Integer> {
     List<Book> findAllByCid(int cid,Pageable pageable);
     List<Book> findAllByTitleLikeOrAuchorLikeOrPriceLike(String Title,String Auchor,String Price,Pageable pageable);
+    Book findById(int id);
 }

@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Entity.Layui;
 import com.example.demo.Entity.User;
 import com.example.demo.Service.UserService;
 import com.example.demo.utils.RandomValidateCodeUtil;
@@ -17,11 +18,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
+import javax.naming.Name;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 @Controller
@@ -167,6 +171,18 @@ public class UserController {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+    @GetMapping("/admin/user")
+    @ResponseBody
+    public Layui getAlluser(@RequestParam(name = "page") String page, @RequestParam(name = "limit") String limit){
+        int page1= Integer.parseInt(page)-1;
+        int pagesize = Integer.parseInt(limit);
+        Layui layui = new Layui();
+        layui.setCode(0);
+        layui.setCount(1000);
+        layui.setMsg("");
+        layui.setData(userService.getUserBypage(page1,pagesize));
+        return  layui;
     }
     @PostMapping("/checkVerify")
     public boolean checkVerify(@RequestParam String verifyInput, HttpSession session) {

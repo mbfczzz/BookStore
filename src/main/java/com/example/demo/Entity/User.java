@@ -3,6 +3,7 @@ package com.example.demo.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -80,6 +81,14 @@ public class User {
         return enable;
     }
 
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
+    }
+
     public void setEnable(Boolean enable) {
         this.enable = enable;
     }
@@ -94,4 +103,6 @@ public class User {
 
     Boolean enable;
     String picture;
+    @Transient
+    List<Role> roleList;
 }

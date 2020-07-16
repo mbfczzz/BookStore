@@ -1,14 +1,20 @@
 package com.example.demo.Service;
 
 import com.example.demo.Dao.UserDao;
+import com.example.demo.Entity.Role;
 import com.example.demo.Entity.User;
+import com.example.demo.Entity.Userole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.jws.soap.SOAPBinding;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -16,6 +22,10 @@ public class UserService {
     private  String from;
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private UseroleService useroleService;
     @Autowired
     UserDao userDao;
     public User get(String username, String password){
@@ -61,6 +71,20 @@ public class UserService {
         message.setSubject(title);
         message.setText(content);
         mailSender.send(message);
+    }
+    public User getUserById(int id){
+        return userDao.findAllById(id);
+    }
+    public List<User> getUserBypage(int page, int limit){
+        Pageable pageable = PageRequest.of(page,limit);
+        List<User> users = userDao.findAll(pageable).getContent();
+        for(User user:users){
+            int id = user.getId();
+            List<Integer> rids = useroleService.getRid(id).stream().map(Userole::getRid).collect(Collectors.toList());
+            List<Role> roles = roleService.getRoleById(rids);
+            user.setRoleList(roles);
+        }
+        return users;
     }
 
 }

@@ -1,35 +1,48 @@
 $(function () {//页面加载完成
-    function lightCategory(){
-        var  falg = true;
-        var href = window.location.href;
-        var n = href.substr(href.length-6,1);
-        $(".nav li").each(function(){
-            var val = $(this).val();
-            if(val == n){
-                $(this).addClass("active");
-                falg =false;
+        var  flag = true;
+        function f() {
+            var  href = window.location.pathname;
+            var  n = href.substr(href.length-6,1);
+            $(".nav li").each(function(){
+                var val = $(this).val();
+                if(val == n){
+                    $(this).addClass("active");
+                    flag =false;
+                }
+            });
+            var urlval1 = getQueryVariable("pagen");
+            if(flag == true){
+                $(".nav li:first-child").addClass("active");
             }
-        });
-        if(falg == true){
-            $(".nav li:first-child").addClass("active");
         }
-
-        var urlval = getQueryVariable("pagen");
-        if(urlval == false){
-            $(".pagenumber").eq(1).parent().addClass("active");
-        }
-        $(".pagenumber").each(function(){
-            var val = $(this).text();
-            if(urlval == val){
-                $(this).parent().addClass("active");
+        function f1() {
+            var urlval = getQueryVariable("pagen");
+            if(urlval == false){
+                $(".pagenumber").eq(1).parent().addClass("active");
             }
-        });
-    }
+            $(".pagenumber").each(function(){
+                flag = false;
+                var val = $(this).text();
+                if(urlval == val){
+                    $(this).parent().addClass("active");
+                }
+            });
+        }
+        f();
+        f1();
 });
 
 var options = {
     html : true,
 }
+
+$(".well").click(function (){
+        var goodsid = $(this).children("input").val();
+        console.log(goodsid);
+        var host = "/book/goods";
+        window.location.assign(host+"?goodsid="+goodsid);
+});
+
 $(".well").hover(function(){
     $(this).popover(options);
     $(this).popover('show')

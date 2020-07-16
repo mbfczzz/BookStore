@@ -1,7 +1,6 @@
 *{
     margin: 0px;
     padding: 0px;
-    text-align: center;
 }
 p{
     margin: 0px;
@@ -79,6 +78,7 @@ a{
 }
 .well{
     padding: 10px;
+    cursor: pointer;
 }
 .goods p{
     text-align: left;
@@ -110,7 +110,7 @@ tr{
     float: left;
     margin-right: 40px;
 }
-table{
+#btable{
     position: relative;
     left: 150px;
     width: 1200px;

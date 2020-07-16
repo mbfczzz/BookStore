@@ -13,16 +13,18 @@
 </head>
 <body>
 <div class="head"><!--头部-->
-    <div class="login_msg">
-        <div shiro:guest class="no_login">
-            <span class="no_login">欢迎<a href="/login">登录</a></span>
-            <span class="no_login"><a href="/register">注册</a></span>
-        </div>
+            <div class="login_msg">
+                <div shiro:guest class="no_login">
+                    <span class="no_login">欢迎<a href="/login">登录</a></span>
+                    <span class="no_login"><a href="/register">注册</a></span>
+                </div>
 
-            <div   shiro:user class="have_logined"> <!--未登录时是隐藏的-->
+            <div  shiro:user class="have_logined"> <!--未登录时是隐藏的-->
                 <div class="head_left">
                     <span>欢迎 <span shiro:principal=""></span>登陆</span>
-                    <span><a href="">购物车</a></span>
+                    <span><a href="/shopcar">购物车</a></span>
+                    <span><a href="">历史订单</a></span>
+                    <span><a href="/admin/index">个人中心</a></span>
                 </div>
                 <div class="head_right">
                     <span><a href="/fgpassword">修改密码</a></span>
@@ -63,11 +65,12 @@
     </div>
 
     <div class="right">
-        <table border="0" cellspacing="0" cellpadding="4">
+        <table  id="btable" border="0" cellspacing="0" cellpadding="4">
             <tr th:each="book : ${books}">
                 <td >
-                    <div class="well" data-toggle="popover" data-trigger="focus" th:title="${book.getTitle()}" th:data-content="'<p>'
+                    <div class="well" data-toggle="popover"  data-trigger="focus" th:title="${book.getTitle()}" th:data-content="'<p>'
                     +${book.getAuchor()}+'/'+${book.getDate()}+'/'+${book.getPress()}+'</p>'+'<p>'+${book.getAbs()}+'</p>'" html="true">
+                        <input type="hidden" th:value="${book.getId()}">
                     <div class="goods">
                         <img th:src="${book.getCover()}"  title="活着"/>
                         <p id="bookname" th:text="${book.getTitle()}"></p>

@@ -1,4 +1,22 @@
-$(function () {//页面加载完成
+$(function () {
+    //页面加载完成
+    $("#bt_captcha").click(function(){
+        let count = 15 ; //倒计时的时间
+        const countDown = setInterval(() => {
+            if(count == 0){
+                $("#bt_captcha").text('重新发送').removeAttr('disabled');
+                clearInterval(countDown);
+            }else{
+                $('#bt_captcha').attr('disabled', true);
+                $('#bt_captcha').css({
+                    background: '#d8d8d8',
+                    color: '#707070',
+                });  //按钮的
+                $('#bt_captcha').text('重新发送('+count+')');
+            }
+            count--;
+        }, 1000);
+    });
     $("#changepassword").bootstrapValidator({
         // 默认的提示消息
         message: "this is not valid field",

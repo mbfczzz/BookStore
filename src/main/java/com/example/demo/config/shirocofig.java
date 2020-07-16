@@ -38,25 +38,29 @@ public class shirocofig  {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         shiroFilterFactoryBean.setLoginUrl("/login");
         Map<String, String> filterChainDefinitionMap = new HashMap<>();
-/*        if (anonUrls != null && anonUrls.length > 0) {
+        List<String> anonUrls = new LinkedList<>();
+        anonUrls.add("/index");
+        anonUrls.add("/register");
+        anonUrls.add("fgpassword");
+      if (anonUrls != null && anonUrls.size() > 0) {
             for (String anon : anonUrls) {
                 filterChainDefinitionMap.put(anon, "anon");
             }
-        }*/
+        }
         filterChainDefinitionMap.put("/logout", "logout");
         // 设置登出的路径
 /*        if (null != logOutUrl) {
             filterChainDefinitionMap.put(logOutUrl, "logout");
         }*/
         List<String> authcUlrs = new LinkedList<>();
-        authcUlrs.add("/index");
+        /*authcUlrs.add("/shopcar/goods");
         // 设置拦截的路径
         if (authcUlrs != null && authcUlrs.size() > 0) {
             for (String authc : authcUlrs) {
-                filterChainDefinitionMap.put(authc, "anon");
-                /*filterChainDefinitionMap.put(authc, "authc");*/
+                filterChainDefinitionMap.put(authc, "authc");
+                *//*filterChainDefinitionMap.put(authc, "authc");*//*
             }
-        }
+        }*/
         filterChainDefinitionMap.put("/static/**","anon");
         filterChainDefinitionMap.put("/view/**","anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

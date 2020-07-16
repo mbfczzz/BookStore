@@ -1,13 +1,13 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Entity.Book;
+import com.example.demo.Entity.Layui;
 import com.example.demo.Service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -64,5 +64,26 @@ public class BookController {
        m.setViewName("index");
        m.addObject("books",books);
        return  m;
+    }
+    @GetMapping("/book/goods")
+    public ModelAndView goods(@RequestParam(name = "goodsid") String goodsid){
+        int id = Integer.parseInt(goodsid);
+        Book book = bookService.getByid(id);
+        ModelAndView m = new ModelAndView();
+        m.addObject("book",book);
+        m.setViewName("goods");
+        return  m;
+    }
+    @GetMapping("/admin/book")
+    @ResponseBody
+    public Layui getAllBook(@RequestParam(name = "page") String page, @RequestParam(name = "limit") String limit){
+        int page1= Integer.parseInt(page)-1;
+        int pagesize = Integer.parseInt(limit);
+        Layui layui = new Layui();
+        layui.setCode(0);
+        layui.setCount(1000);
+        layui.setMsg("");
+        layui.setData(bookService.getBookBypage(page1,pagesize));
+        return  layui;
     }
 }
