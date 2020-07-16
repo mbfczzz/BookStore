@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="never">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=device-dpi"/>
+    <script th:src="@{/tool/jquery-3.5.1.js}"></script>
+    <script th:src="@{/tool/bootstrap/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/tool/bootstrap/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/tool/layui/layui/css/layui.css}">
+    <style>
+        a:hover{
+            text-decoration: none;
+        }
+        a:active{
+            text-decoration: none;
+        }
+
+        /*有链接属性时，绿色*/
+        a:link{
+            text-decoration: none;
+        }
+
+        /*点击链接后，蓝色*/
+        a:visited{
+            text-decoration: none;
+        }
+        #main{
+            margin-left: 200px;
+        }
+        .layui-border-box, .layui-border-box {
+            margin-top: 0px;
+        }
+        .layui-table-box{
+            text-align: center;
+        }
+        .layui-table th{
+            text-align: center;
+        }
+        .right{
+            padding: 0px;
+            width: 1600px;
+        }
+        tr{
+            float: none;
+        }
+    </style>
+    <title>主页</title>
+</head>
+<body>
+<div class="head"><!--头部-->
+    <div class="login_msg">
+        <div shiro:guest class="no_login">
+            <span class="no_login">欢迎<a href="/login">登录</a></span>
+            <span class="no_login"><a href="/register">注册</a></span>
+        </div>
+
+        <div  shiro:user class="have_logined"> <!--未登录时是隐藏的-->
+            <div class="head_left">
+                <span>欢迎 <span shiro:principal=""></span>登陆</span>
+                <span><a href="/shopcar">购物车</a></span>
+                <span><a href="">历史订单</a></span>
+                <span><a href="/admin/index">个人中心</a></span>
+            </div>
+            <div class="head_right">
+                <span><a href="/fgpassword">修改密码</a></span>
+                <span><a href="/logout">退出登录</a></span>
+            </div>
+        </div>
+    </div>
+    <div class="search">
+        <form action="/book/search" method="get">
+            <div class="input-group">
+                <input type="search" class="form-control" name="search" id="text_search" placeholder="搜索">
+                <span class="input-group-btn">
+                        <button type="submit"  class="btn btn-default" id="bt_search"><span
+                                class="glyphicon glyphicon-search"></span></button>
+                    </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<hr></hr>
+
+
+<div class="center">
+    <div class="left">
+        <ul class="nav nav-pills nav-stacked">
+            <li value="0"><a href="/category/0/book">全部</a></li>
+            <li value="1"><a href="/category/1/book">文学</a></li>
+            <li value="2"><a href="/category/2/book">流行</a></li>
+            <li value="3"><a href="/category/3/book">经营</a></li>
+            <li value="4"><a href="/category/4/book">科幻</a></li>
+            <li value="5"><a href="/category/5/book">艺术</a></li>
+            <li value="6"><a href="/category/6/book">哲学</a></li>
+            <li value="7"><a href="/category/7/book">生活</a></li>
+            <li value="8"><a href="/category/8/book">科技</a></li>
+        </ul>
+    </div>
+
+    <div class="right">
+        <table id="demo" lay-filter="test"></table>
+    </div>
+</div>
+<div class="footer">
+    Java Web 网上书店项目<span><a href="">详情</a></span>
+</div>
+<script th:src="@{/js/index.js}">
+</script>
+<script th:src="@{/tool/layui/layui/layui.js}"></script>
+<script>
+    layui.use(['element','table'], function(){
+        var element = layui.element;
+        var table = layui.table;
+        //一些事件监听
+        element.on('tab(demo)', function(data){
+            console.log(data);
+        });
+        layui.use('table', function () {  // 引入 table模块
+            table.render({
+                elem: '#demo'
+                ,height: 490
+                ,url: '/getshopcar' //数据接口
+                ,page: true //开启分页
+                ,cols: [
+                    [ //表头
+                        {field: 'id', title: 'ID', sort: true,width: 160}
+                        ,{field: 'number', title: '数量',width: 160},
+                        ,{field: 'bookname', title: '书名',width: 170}
+                        ,{field: 'amount', title: '库存',width: 160}
+                        ,{field: 'sdate', title: '加入日期',width: 160}
+                        ,{field: 'cprice', title: '总价',width: 160}
+                        ,{field: 'price', title: '单价',width: 160}
+                        ,{field: '', title: '操作',toolbar:"#bar",width: 320}
+                    ]
+                ]
+            });
+        });
+    });
+</script>
+<script type="text/html" id="bar">
+    <button class="layui-btn layui-btn-normal layui-btn layui-btn-sm">编辑</button>
+    <button class="layui-btn layui-btn layui-btn-sm">移除</button>
+</script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/tool/jquery-3.5.1.js}"></script>
+    <script th:src="@{/tool/bootstrap/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/tool/bootstrap/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/tool/layui/layui/css/layui.css}">
+    <style>
+        .layui-side{
+            top:110px;
+        }
+        a:hover{
+            text-decoration: none;
+        }
+        a:active{
+            text-decoration: none;
+        }
+
+        /*有链接属性时，绿色*/
+        a:link{
+            text-decoration: none;
+        }
+
+        /*点击链接后，蓝色*/
+        a:visited{
+            text-decoration: none;
+        }
+        #main{
+            margin-left: 200px;
+        }
+        .layui-border-box, .layui-border-box {
+            margin-top: 0px;
+        }
+        .layui-table-box{
+            text-align: center;
+        }
+        .layui-table th {
+            text-align: center;
+        }
+        .layui-layer-title{
+            text-align: center;
+        }
+        .layui-layer-content{
+            margin-top: 10px;
+        }
+        .layui-form-label{
+            width: 100px;
+        }
+    </style>
+    <title>Title</title>
+</head>
+<body>
+<form class="layui-form" action="" id="tablefrom" lay-filter="tablefrom" style="display: none">
+    <div class="layui-form-item">
+        <label class="layui-form-label">id:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="id" required lay-verify="required"  disabled="disabled" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="username" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">真实姓名:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机号:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="phone" required lay-verify="required" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮箱:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="email" required lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色分配:</label>
+        <div class="layui-input-block" th:each="obj:${role}">
+            <input class="role" type="checkbox" th:name="${obj.getRolename()}" th:value="${obj.getId()}" th:title="${obj.getRolenameZh()}" lay-skin="primary">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block" style="margin-left:80px">
+            <button class="layui-btn" lay-submit lay-filter="formDemo" >立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<div class="head"><!--头部-->
+    <div class="login_msg">
+        <div shiro:guest class="no_login">
+            <span class="no_login">欢迎<a href="/login">登录</a></span>
+            <span class="no_login"><a href="/register">注册</a></span>
+        </div>
+
+        <div  shiro:user class="have_logined"> <!--未登录时是隐藏的-->
+            <div class="head_left">
+                <span>欢迎 <span shiro:principal=""></span>登陆</span>
+                <span><a href="/shopcar">购物车</a></span>
+                <span><a href="">历史订单</a></span>
+                <span><a href="/admin/index">个人中心</a></span>
+            </div>
+            <div class="head_right">
+                <span><a href="/fgpassword">修改密码</a></span>
+                <span><a href="/logout">退出登录</a></span>
+            </div>
+        </div>
+    </div>
+    <div class="search">
+        <form action="/book/search" method="get">
+            <div class="input-group">
+                <input type="search" class="form-control" name="search" id="text_search" placeholder="搜索">
+                <span class="input-group-btn">
+                        <button type="submit"  class="btn btn-default" id="bt_search"><span
+                                class="glyphicon glyphicon-search"></span></button>
+                    </span>
+            </div>
+        </form>
+    </div>
+</div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
+                <li shiro:hasRole="Vistor" class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">首页</a>
+                    <dl class="layui-nav-child">
+                        <dd value="index"><a href="/admin/index">个人信息</a></dd>
+                    </dl>
+                </li>
+                <li shiro:hasRole="UserAdmin" class="layui-nav-item">
+                    <a href="javascript:;">用户管理</a>
+                    <dl class="layui-nav-child">
+                        <dd value="userinform"><a href="/admin/userinform">用户信息</a></dd>
+                        <dd><a href="">角色配置</a></dd>
+                    </dl>
+                </li>
+                <li shiro:hasRole="BookAdmin" class="layui-nav-item">
+                    <a href="javascript:;">内容管理</a>
+                    <dl class="layui-nav-child">
+                        <dd value="bookpage"><a href="/admin/bookpage">图书信息</a></dd>
+                        <dd><a href="">评论信息</a></dd>
+                    </dl>
+                </li>
+                <li shiro:hasRole="OrderAdmin" class="layui-nav-item">
+                    <a href="javascript:;">订单管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">购物车管理</a></dd>
+                        <dd><a href="">历史订单管理</a></dd>
+                    </dl>
+                </li>
+                <li shiro:hasRole="SystemAdmin" class="layui-nav-item">
+                    <a href="javascript:;">系统管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">网站配置</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="main">
+        <div style="margin-top: 10px; margin-left: 10px;font-weight: bold">
+        <span class="layui-breadcrumb">
+        <a href="">用户管理</a>
+        <a href="">用户信息</a>
+        <a href="">角色配置</a>
+        </span>
+        </div>
+        <hr>
+        <table id="demo" lay-filter="test"></table>
+    </div>
+<script th:src="@{/tool/layui/layui/layui.js}"></script>
+<script th:src="@{/js/index.js}"></script>
+<script>
+    layui.use(['element','table','form'], function(){
+        var element = layui.element;
+        var form = layui.form;
+        var table = layui.table;
+        var allrolelist=[];
+        var selectedId=[];
+        var  roleList=[];
+        //一些事件监听
+        form.on('submit(formDemo)', function(data){
+            var data = data.field;
+            var roleval = $(".role");
+            for(var i=0;i<roleval.length;i++){
+                if(roleval[i].checked == true){
+                    selectedId.push(roleval[i].value);
+                }
+             }
+            console.log(allrolelist);
+            for(var j=0;j<selectedId.length;j++){
+                    for (var i=0;i<allrolelist.length;i++){
+                        if(selectedId[j]==allrolelist[i].id){
+                            roleList.push(allrolelist[i]);
+                        }
+                    }
+            }
+             data.roleList = roleList;
+            $.ajax({
+                type: "Post",
+                url:"/admin/editorUser",
+                contentType: 'application/json',
+                data:JSON.stringify(data),
+                dataType: "JSON",
+                success: function(result) {
+                    layer.alert(result.message,function () {
+                            window.location.reload();
+                        }
+                    );
+                }
+            })
+            return false;
+        });
+            table.render({
+                elem: '#demo'
+                ,height: 312
+                ,url: '/admin/user' //数据接口
+                ,page: true //开启分页
+                ,cols: [
+                    [ //表头
+                    {field: 'id', title: 'ID', width:160, sort: true}
+                    ,{field: 'username', title: '用户名',width: 160}
+                    ,{field: 'name', title: '真实姓名',width:230}
+                    ,{field: 'phone', title: '手机号',width:350}
+                    ,{field: 'email', title: '邮箱',width:350},
+                    ,{field: 'enable', width:93,title: '状态',templet:function (d) {
+                        console.log(d);
+                            var state = "";
+                            if (d.enable == true) {
+                                state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='test'  lay onclick='changeStatus()' checked='checked' name='status'  lay-skin='switch'>";
+                            }
+                            else {
+                                state = "<input type='checkbox' value='" + d.id + "' id='status' lay-filter='test' onclick='changeStatus()' name='status'  lay-skin='switch' >";
+
+                            }
+                            return state;
+                        },sort: true}
+                    ,{field: '', title: '操作',toolbar:"#bar",width:350}
+                ]
+                ]
+            });
+
+        form.on('switch(test)', function(data){
+            var check ={
+                id:data.value,
+                enable:data.elem.checked
+            }
+            var message="";
+            $.ajax({
+                type: "Post",
+                url:"/admin/changeStatus",
+                contentType: 'application/json',
+                data:JSON.stringify(check),
+                dataType: "JSON",
+                success: function(result) {
+                    if(result.message =="200"){
+                            if(data.elem.checked == true){
+                                    message ="已启用!"
+                               }
+                            else {
+                                message = "已禁用!"
+                            }
+                        }
+                    layer.alert(message,function () {
+                            window.location.reload();
+                        }
+                    );
+                }
+            })
+        });
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+                if(layEvent === 'editor'){
+                    //查看
+                    allrolelist = data.roleList;
+                    var roleval = $(".role");
+                    for(var i=0;i<roleval.length;i++){
+                        roleval[i].checked = false;
+                    }
+                    for(var i=0;i<roleval.length;i++){
+                            for(var j=0;j<allrolelist.length;j++){
+                                if(roleval[i].value == allrolelist[j].id)
+                                    roleval[i].checked=true;
+                                }
+                            }
+                    layer.open({
+                        type: 1,
+                        title:"用户信息修改",
+                        content: $("#tablefrom"),
+                        area: ['500px', '650px']
+                    });
+                    form.val("tablefrom",{
+                            'id':data.id,
+                            'username':data.username,
+                             'name':data.name,
+                             'phone':data.phone,
+                             'email':data.email
+                    })
+                }
+            });
+        });
+</script>
+
+<script type="text/html" id="bar">
+        <button class="layui-btn layui-btn-normal layui-btn layui-btn-sm" lay-event="editor">编辑</button>
+        <button class="layui-btn layui-btn layui-btn-sm">移除</button>
+</script>
+
+<script>
+    $(function () {//页面加载完成
+        var valhref =  window.location.href;
+        var val = valhref.substr(32);
+        $("dd").each(function () {
+            if($(this).attr("value") == val){
+                $(this).addClass("layui-this");
+                $(this).parent().parent().addClass("layui-nav-itemed");
+            }
+        })
+    });
+</script>
+</body>
+</html>
+</body>
+</html>

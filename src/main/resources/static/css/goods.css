@@ -1,0 +1,95 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    font-family: "宋体";
+}
+body{
+    height: 100%;
+}
+html{
+    height: 100%;
+}
+.login_msg{
+    background-color: ivory;
+    height: 30px;
+    text-align: center;
+}
+.main{
+    width: 100%;
+    min-width: 1700px;
+}
+.no_login{
+    padding-top: 5px;
+
+}
+.head_left{
+    width: auto;
+    position: absolute;
+    left: 200px;
+}
+.head_right{
+    width: auto;
+    position: absolute;
+    right: 50px;
+}
+.have_logined{  
+    padding-top: 5px;
+
+}
+.form-control{
+    width: 100px;
+}
+.input-group{
+    height: 30px;
+    width: 300px;
+    position: absolute;
+    right: 20%;
+    margin-top: 20px;
+}
+.search{
+    background-color: azure;
+    height: 80px;
+}
+
+#exzoom{
+        width: 300px;
+	    /*height: 400px;*/
+	    margin: 20px auto;
+}
+#right{
+    height: 500px;
+    width: 500px;
+    background-color: GhostWhite;
+}
+.text-monospace{
+    padding-bottom: 15px;
+}
+
+#nums{
+    width: 30px;
+    height: 40px;
+    text-align: center;
+  }
+  .bt_nums{
+    width: 25px;
+    text-align: center;
+    outline: medium;
+    
+  }
+  #submit{
+      outline: medium;
+  }
+  .book_name{
+    font-size: 20px;
+    color: black;
+    margin: 30px 0px 15px 40px;
+    font-weight: 900;
+  }
+  .text-monospace{
+    font-size:15px;
+    color: black;
+    margin: 0px 0px 15px 40px;
+  }
+  #cart{
+    margin-top: 30px;
+  }

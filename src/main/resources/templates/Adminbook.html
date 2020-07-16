@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/tool/jquery-3.5.1.js}"></script>
+    <script th:src="@{/tool/bootstrap/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/tool/bootstrap/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/tool/layui/layui/css/layui.css}">
+    <style>
+        .layui-side{
+            top:110px;
+        }
+        a:hover{
+            text-decoration: none;
+        }
+        a:active{
+            text-decoration: none;
+        }
+
+        /*有链接属性时，绿色*/
+        a:link{
+            text-decoration: none;
+        }
+
+        /*点击链接后，蓝色*/
+        a:visited{
+            text-decoration: none;
+        }
+        #main{
+            margin-left: 200px;
+        }
+        .layui-border-box, .layui-border-box {
+            margin-top: 0px;
+        }
+        .layui-table-box{
+            text-align: center;
+        }
+        .layui-table th{
+            text-align: center;
+        }
+    </style>
+    <title>Title</title>
+</head>
+<body>
+
+<div class="head"><!--头部-->
+    <div class="login_msg">
+        <div shiro:guest class="no_login">
+            <span class="no_login">欢迎<a href="/login">登录</a></span>
+            <span class="no_login"><a href="/register">注册</a></span>
+        </div>
+
+        <div  shiro:user class="have_logined"> <!--未登录时是隐藏的-->
+            <div class="head_left">
+                <span>欢迎 <span shiro:principal=""></span>登陆</span>
+                <span><a href="/shopcar">购物车</a></span>
+                <span><a href="">历史订单</a></span>
+                <span><a href="/admin/index">个人中心</a></span>
+            </div>
+            <div class="head_right">
+                <span><a href="/fgpassword">修改密码</a></span>
+                <span><a href="/logout">退出登录</a></span>
+            </div>
+        </div>
+    </div>
+    <div class="search">
+        <form action="/book/search" method="get">
+            <div class="input-group">
+                <input type="search" class="form-control" name="search" id="text_search" placeholder="搜索">
+                <span class="input-group-btn">
+                        <button type="submit"  class="btn btn-default" id="bt_search"><span
+                                class="glyphicon glyphicon-search"></span></button>
+                    </span>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+        <ul class="layui-nav layui-nav-tree" lay-filter="test">
+            <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
+            <li shiro:hasRole="Vistor" class="layui-nav-item layui-nav-itemed">
+                <a href="javascript:;">首页</a>
+                <dl class="layui-nav-child">
+                    <dd value="index"><a href="/admin/index">个人信息</a></dd>
+                </dl>
+            </li>
+            <li shiro:hasRole="UserAdmin" class="layui-nav-item">
+                <a href="javascript:;">用户管理</a>
+                <dl class="layui-nav-child">
+                    <dd value="userinform"><a href="/admin/userinform">用户信息</a></dd>
+                    <dd><a href="">角色配置</a></dd>
+                </dl>
+            </li>
+            <li shiro:hasRole="BookAdmin" class="layui-nav-item">
+                <a href="javascript:;">内容管理</a>
+                <dl class="layui-nav-child">
+                    <dd value="bookpage"><a href="/admin/bookpage">图书信息</a></dd>
+                    <dd><a href="">评论信息</a></dd>
+                </dl>
+            </li>
+            <li shiro:hasRole="OrderAdmin" class="layui-nav-item">
+                <a href="javascript:;">订单管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">购物车管理</a></dd>
+                    <dd><a href="">历史订单管理</a></dd>
+                </dl>
+            </li>
+            <li shiro:hasRole="SystemAdmin" class="layui-nav-item">
+                <a href="javascript:;">系统管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">网站配置</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="main">
+    <div style="margin-top: 10px; margin-left: 10px;font-weight: bold">
+        <span class="layui-breadcrumb">
+        <a href="">内容管理</a>
+        <a href="">图书信息</a>
+        </span>
+    </div>
+    <hr>
+    <table id="demo" lay-filter="test"></table>
+</div>
+<script th:src="@{/tool/layui/layui/layui.js}"></script>
+<script th:src="@{/js/index.js}"></script>
+<script>
+    layui.use(['element','table'], function(){
+        var element = layui.element;
+        var table = layui.table;
+        //一些事件监听
+        element.on('tab(demo)', function(data){
+            console.log(data);
+        });
+        layui.use('table', function () {  // 引入 table模块
+            table.render({
+                elem: '#demo'
+                ,height: 490
+                ,url: '/admin/book' //数据接口
+                ,page: true //开启分页
+                ,cols: [
+                    [ //表头
+                        {field: 'id', title: 'ID', width:160, sort: true}
+                        ,{field: 'cover', title: '封面',width: 160}
+                        ,{field: 'title', title: '书名',width:100}
+                        ,{field: 'auchor', title: '作者',width:160}
+                        ,{field: 'date', title: '出版日期',width:160}
+                        ,{field: 'press', title: '出版社',width:160}
+                        ,{field: 'abs', title: '简介',width:385}
+                        ,{field: 'price', title: '价格',width:80}
+                        ,{field: 'amount', title: '库存',width:80}
+                        ,{field: '', title: '操作',toolbar:"#bar",width:160}
+                    ]
+                ]
+            });
+        });
+    });
+</script>
+<script type="text/html" id="bar">
+    <button class="layui-btn layui-btn-normal layui-btn layui-btn-sm">编辑</button>
+    <button class="layui-btn layui-btn layui-btn-sm">移除</button>
+</script>
+<script>
+    $(function () {//页面加载完成
+        var valhref =  window.location.href;
+        var val = valhref.substr(32);
+        console.log(val)
+        $("dd").each(function () {
+            if($(this).attr("value") == val){
+                console.log($(this));
+                $(this).addClass("layui-this");
+                $(this).parent().parent().addClass("layui-nav-itemed");
+            }
+        })
+    });
+</script>
+</body>
+</html>
+</body>
+</html>
